@@ -12,6 +12,7 @@
         "cornatul/news": "@dev",
         "cornatul/social": "@dev",
         "cornatul/wordpress": "@dev",
+        "crwlr/crawler": "dev-main",
         "enqueue/amqp-bunny": "^0.10.0@dev",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -38,8 +39,8 @@
         "smolblog/oauth2-twitter": "dev-main",
         "spatie/laravel-query-builder": "dev-main",
         "swiftmailer/swiftmailer": "5.x-dev",
+        "symfony/dom-crawler": "6.3.x-dev",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "^13.2",
-        "zofe/demo-module": "dev-main",
         "zofe/rapyd-livewire": "dev-main"
     },
     "require-dev": {

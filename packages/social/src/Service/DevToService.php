@@ -31,7 +31,8 @@ class DevToService
      */
     public function shareOnWall(Message $message):array
     {
-        $response = $this->client->post('articles',
+        $response = $this->client->post(
+            'articles',
             [
                 'json' => [
                     "article" => [

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Cache;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 
-
 /**
  */
 class TwitterService
@@ -29,8 +28,7 @@ class TwitterService
             'long' => 0.1275,
             'display_coordinates' => true,
             'place_id'=> 44418,
-            'response_format' => 'json']
-        );
+            'response_format' => 'json']);
     }
 
     public function getTrends(int $locationID = 44418):Collection
@@ -46,7 +44,7 @@ class TwitterService
 
             $data = collect();
 
-            collect($collection->get('trends'))->each(function($item) use($data){
+            collect($collection->get('trends'))->each(function ($item) use ($data) {
                 $data->push(TwitterTrendingDTO::from($item));
             });
 
@@ -62,7 +60,7 @@ class TwitterService
 
         $data = collect();
 
-        collect($locations)->each(function($item) use($data){
+        collect($locations)->each(function ($item) use ($data) {
             $data->push(TwitterTrendingDTO::from($item));
         });
 

@@ -6,6 +6,7 @@ namespace Cornatul\Social\Service;
 use Cornatul\Social\Objects\Message;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\Github;
@@ -47,7 +48,7 @@ class GithubService
      * @throws GuzzleException
      * @throws \JsonException
      */
-    public function createGist(AccessTokenInterface $accessToken, Message $message)
+    public function createGist(AccessTokenInterface $accessToken, Message $message):Collection
     {
         $client = new Client();
 
@@ -67,7 +68,8 @@ class GithubService
             ], JSON_THROW_ON_ERROR),
         ]);
 
-        return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
+        return collect(
+            json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR)
+        );
     }
 }
