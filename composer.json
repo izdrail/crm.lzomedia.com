@@ -23,7 +23,7 @@
         "laminas/laminas-feed": "2.0.0",
         "laminas/laminas-http": "2.0.0",
         "laminas/laminas-servicemanager": "2.0.0",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^10.0",
         "laravel/horizon": "^5.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
