@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornatul\Social\Service;
 
+use Cornatul\Social\Contracts\ShareContract;
 use Cornatul\Social\Objects\Message;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -11,7 +12,7 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\LinkedIn;
 use League\OAuth2\Client\Token\LinkedInAccessToken;
 
-class PinterestService
+class PinterestService implements ShareContract
 {
     private LinkedIn $provider;
 
@@ -57,6 +58,8 @@ class PinterestService
             'X-Restli-Protocol-Version' => '2.0.0',
         ];
 
+        //generate a better way to
+
         $body = [
             'author' => 'urn:li:person:' . $user->getId(),
             'lifecycleState' => 'PUBLISHED',
@@ -92,9 +95,11 @@ class PinterestService
             ],
         ];
 
-        return $client->request('POST', 'https://api.linkedin.com/v2/ugcPosts', [
+        $response =  $client->request('POST', 'https://api.linkedin.com/v2/ugcPosts', [
             'headers' => $headers,
             'json' => $body,
         ]);
+
+        logger($response);
     }
 }

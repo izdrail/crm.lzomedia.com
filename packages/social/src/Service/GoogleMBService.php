@@ -1,12 +1,13 @@
 <?php
 
 namespace Cornatul\Social\Service;
+use Cornatul\Social\Contracts\ShareContract;
 use Cornatul\Social\Objects\Message;
 use GuzzleHttp\Exception\GuzzleException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\Google;
 
-class GoogleMBService
+class GoogleMBService implements ShareContract
 {
     private Google $provider;
 

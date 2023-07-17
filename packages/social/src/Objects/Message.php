@@ -9,7 +9,6 @@ namespace Cornatul\Social\Objects;
  */
 class Message
 {
-
     public string $title;
     public string $body;
     public string $url;

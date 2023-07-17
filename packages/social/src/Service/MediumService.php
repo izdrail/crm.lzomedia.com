@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use JonathanTorres\MediumSdk\Medium;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 
-class MediumService
+class MediumService implements ShareContract
 {
 
     public Medium $provider;
@@ -18,9 +18,10 @@ class MediumService
         $this->provider = $provider;
     }
 
-    public function shareOnWall(Message $message):Collection
+    public function shareOnWall(AccessTokenInterface $accessToken, Message $message):void
     {
 
+        //todo this needs to be a access token interface class
         $this->provider->connect(config('social.medium.token'));
 
         $user = $this->provider->getAuthenticatedUser();
@@ -34,6 +35,7 @@ class MediumService
             'tags' => $message->getTagsAsArray(),
         ];
 
-        return collect($this->provider->createPost($user->data->id, $data));
+        $response =  collect($this->provider->createPost($user->data->id, $data));
+        logger(json_encode($response));
     }
 }

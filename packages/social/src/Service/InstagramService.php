@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace Cornatul\Social\Service;
 
+use Cornatul\Social\Contracts\ShareContract;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\Github;
 use League\OAuth2\Client\Provider\Instagram;
 use League\OAuth2\Client\Provider\LinkedIn;
+use League\OAuth2\Client\Token\AccessTokenInterface;
+use Cornatul\Social\Objects\Message;
 
-class InstagramService
+class InstagramService implements ShareContract
 {
     private Instagram $provider;
 
@@ -40,13 +43,8 @@ class InstagramService
         return $this->provider->getResourceOwner($accessToken);
     }
 
-    public function share($accessToken, $message)
+    public function shareOnWall(AccessTokenInterface $accessToken, Message $message): void
     {
-        return $this->provider->getAuthenticatedRequest(
-            'POST',
-            'https://api.instagram.com/v1/users/self/media/recent',
-            $accessToken,
-            ['body' => $message]
-        );
+        logger("Service not yet implemented {$this->provider->getName()}");
     }
 }

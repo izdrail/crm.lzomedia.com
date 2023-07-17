@@ -15,16 +15,16 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 
-class TumblrService
+class TumblrService implements ShareContract
 {
-    public function shareOnWall(AccessTokenInterface $accessToken, Message $message)
+    public function shareOnWall(AccessTokenInterface $accessToken, Message $message): void
     {
         $client = new Client();
 
         $oauth = new Oauth1([
             'consumer_key' => config('social.tumblr.identifier'),
             'consumer_secret' => config('social.tumblr.secret'),
-            'token' => $accessToken->getIdentifier(),
+            'token' => $accessToken->getToken(),
             'token_secret' => $accessToken->getSecret(),
         ]);
 
@@ -40,16 +40,19 @@ class TumblrService
                     "type" => "text",
                     "format" => "html",
                     "title" => $message->getTitle(),
-                    "native_inline_images" => "true",
+                    "native_inline_images" => true,
                     "state" => "published",
                     'tags' => $message->getTagsAsArray(),
                     "body" => $message->getBody() . Message::SIGNATURE,
                 ],
             ]);
+            $response =  ($response->getBody()->getContents());
+            logger($response);
+
         } catch (RequestException $e) {
             info($e->getResponse()?->getBody()->getContents());
         }
+        //
 
-        return ($response->getBody()->getContents());
     }
 }
