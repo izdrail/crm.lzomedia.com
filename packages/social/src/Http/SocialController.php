@@ -2,11 +2,45 @@
 declare(strict_types=1);
 
 namespace Cornatul\Social\Http;
+use Cornatul\Social\Models\SocialAccount;
 use Illuminate\Routing\Controller;
+use Illuminate\View\View;
+
+/**
+ * Class SocialController
+ * @package Cornatul\Social\Http
+ * @todo: Move the models to repository
+ *
+ */
 class SocialController extends Controller
 {
-    public function index()
+    public final function index(): View
     {
-        return view('social::index');
+        $accounts = SocialAccount::all();
+        return view('social::index',
+        	compact('accounts')
+        );
+    }
+
+    public final function view(int $id): View
+    {
+        $account = SocialAccount::with('configuration')->find($id);
+        return view('social::view',
+        	compact('account')
+        );
+    }
+
+
+    public final function edit(int $id): View
+    {
+        $account = SocialAccount::with('configuration')->find($id);
+        return view('social::edit',
+        	compact('account')
+        );
+    }
+
+    public final function update(int $id): View
+    {
+        //@todo implement this to update just the json field
     }
 }

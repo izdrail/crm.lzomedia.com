@@ -184,6 +184,9 @@ return [
         Cornatul\Wordpress\WordpressServiceProvider::class,
         //Social Service Provider
         Cornatul\Social\SocialServiceProvider::class,
+
+        //Telegram Service Provider
+        Cornatul\Telegram\TelegramServiceProvider::class,
     ],
 
     /*

@@ -1,0 +1,29 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - development  # Build only on the development branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Build and Push Docker Image
+        env:
+          IMAGE_TAG: development  # Use "development" as the tag for images built from the development branch
+        run: |
+          docker buildx build \
+            --file Dockerfile \
+            --tag docker.io/${{ secrets.DOCKER_HUB_USERNAME }}/news.ai:${IMAGE_TAG} \
+            --push .

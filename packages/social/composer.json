@@ -29,9 +29,12 @@
         "illuminate/support": ">=9.0.0",
         "jonathantorres/medium-sdk": "dev-master",
         "league/oauth1-client": "^1.10",
+        "league/oauth2-facebook": "dev-main",
         "league/oauth2-github": "dev-main",
         "league/oauth2-google": "dev-main",
+        "league/oauth2-instagram": "dev-main",
         "league/oauth2-linkedin": "^5.1",
+        "smolblog/oauth2-twitter": "dev-main",
         "spatie/laravel-data": ">=3.0.0",
         "tumblr/tumblr": "dev-master"
     },

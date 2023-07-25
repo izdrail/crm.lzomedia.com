@@ -31,7 +31,7 @@ class TwitterService
             'response_format' => 'json']);
     }
 
-    public function getTrends(int $locationID = 44418):Collection
+    public final function getTrends(int $locationID = 44418):Collection
     {
         $cacheKey = "twitter_trends_{$locationID}";
 
@@ -48,22 +48,20 @@ class TwitterService
                 $data->push(TwitterTrendingDTO::from($item));
             });
 
-            Cache::put($cacheKey, $data, $minutes = 60);
+            Cache::put($cacheKey, $data, 60);
         }
         return $data;
     }
 
 
-    public function getGeoLocations():Collection
+    public final function getGeoLocations():Collection
     {
         $locations = Twitter::getTrendsAvailable();
 
         $data = collect();
 
-        collect($locations)->each(function ($item) use ($data) {
+        return collect($locations)->each(function ($item) use ($data) {
             $data->push(TwitterTrendingDTO::from($item));
         });
-
-        return $data;
     }
 }

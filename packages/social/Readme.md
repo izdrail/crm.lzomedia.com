@@ -8,6 +8,12 @@ Currently supported networks are:
 - Dev.to
 - Tumblr
 
+## LinkedIn
+For LinkedIN you will need to create an application on [LinkedIn Developer](https://www.linkedin.com/developers/apps/new) and get the client id and secret.
+The application needs to have all the products activated excerpt the Advertising API.
+
+
+
 ## Installation
 
 ### Composer

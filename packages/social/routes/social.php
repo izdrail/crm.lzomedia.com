@@ -2,7 +2,7 @@
 
 use Cornatul\Social\Http\DevToController;
 use Cornatul\Social\Http\GithubController;
-use Cornatul\Social\Http\GoogleMBController;
+use Cornatul\Social\Http\GoogleController;
 use Cornatul\Social\Http\LinkedInController;
 use Cornatul\Social\Http\MediumController;
 use Cornatul\Social\Http\SocialController;
@@ -12,19 +12,22 @@ use Cornatul\Social\Http\TwitterController;
 Route::group(['middleware' => ['web','auth'],'prefix' => 'social', 'as' => 'social.'], static function () {
     //generate the index page
     Route::get('/', [SocialController::class, 'index'])->name('index');
+    Route::get('/view/{id}', [SocialController::class, 'view'])->name('view');
 
 
     //LinkedIN
-    Route::get('/linkedin', [LinkedInController::class, 'index'])->name('linkedin.index');
-    Route::get('/linkedin/login', [LinkedInController::class, 'login'])->name('linkedin.login');
+    //@todo maybe remove this as is not needed anymore
+    Route::get('/linkedin/', [LinkedInController::class, 'index'])->name('linkedin.index');
+
+    Route::get('/linkedin/{account}/login', [LinkedInController::class, 'login'])->name('linkedin.login');
     Route::get('/linkedin/callback', [LinkedInController::class, 'callback'])->name('linkedin.callback');
     Route::post('/linkedin/shareAction', [LinkedInController::class, 'shareAction'])->name('linkedin.shareAction');
 
     //Google
-    Route::get('/google', [GoogleMBController::class, 'index'])->name('google.index');
-    Route::get('/google/login', [GoogleMBController::class, 'login'])->name('google.login');
-    Route::get('/google/callback', [GoogleMBController::class, 'callback'])->name('google.callback');
-    Route::post('/google/shareAction', [GoogleMBController::class, 'shareAction'])->name('google.shareAction');
+    Route::get('/google', [GoogleController::class, 'index'])->name('google.index');
+    Route::get('/google/login', [GoogleController::class, 'login'])->name('google.login');
+    Route::get('/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+    Route::post('/google/shareAction', [GoogleController::class, 'shareAction'])->name('google.shareAction');
 
 
 

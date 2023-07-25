@@ -1,11 +1,14 @@
 <?php
 declare(strict_types=1);
+
 namespace Cornatul\Social\Http;
 
 
-
+use Cornatul\Social\Models\SocialAccountConfiguration;
 use Cornatul\Social\Objects\Message;
+use Cornatul\Social\Repositories\SocialRepository;
 use Cornatul\Social\Service\LinkedInService;
+use Cornatul\Social\Service\SocialOauthService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -13,82 +16,74 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\LinkedIn;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 class LinkedInController extends Controller
 {
-    private LinkedIn $provider;
 
-    private LinkedInService $service;
+    private SocialRepository $socialRepository;
 
     public function __construct()
     {
-        $this->provider = new LinkedIn([
-            'clientId' => config('social.linkedin.clientId'),
-            'clientSecret' => config('social.linkedin.clientSecret'),
-            'redirectUri' => config('social.linkedin.redirectUri'),
-        ]);
-
-        $this->service = new LinkedInService($this->provider);
+        $this->socialRepository = new SocialRepository();
     }
 
-
-
-    public function index()
+    /**
+     * @throws \Exception
+     */
+    public final function login(int $account, Request $request): RedirectResponse
     {
-        return view('social::linkedin.index');
-    }
+        $service = $this->socialRepository->getSocialService($account);
 
-    public function login(Request $request)
-    {
+        //set session
+        session()->put('account', $account);
+
         if (!$request->has('code')) {
-            $authUrl = $this->service->getAuthUrl();
+            $authUrl = $service->getAuthUrl();
             return redirect($authUrl);
         }
+
+        abort(500, "The social code not found");
     }
 
 
     //generate callback function
 
+    /**
+     * @throws IdentityProviderException
+     * @todo refactor this
+     */
     public function callback(Request $request)
     {
-        $accessToken = $this->service->getAccessToken($request->input('code'));
-        session()->put('linkedin_access_token', $accessToken);
-        return redirect()->route('social.linkedin.index');
-    }
+        try {
+            $account = $this->socialRepository->getAccountFromSession();
+            $provider = $this->socialRepository->getSocialService($account);
+            $accessToken = $provider->getAccessToken($request->get('code'));
+
+            $user = $provider->getProfile($accessToken);
+
+            $credentials = SocialAccountConfiguration::find($account);
 
 
-    /**
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
-     * @throws GuzzleException
-     * @throws IdentityProviderException
-     * @throws \JsonException
-     */
-    public function shareAction(Request $request)
-    {
+            $credentials->information = json_encode([
+                'access_token' => $accessToken->getToken(),
+                'user' => $user
+            ]);
 
-        $request->validate([
-            'title' => 'required',
-            'url' => 'required',
-            'summary' => 'required',
-            'message' => 'required',
-            'image' => 'required',
-        ]);
+            $credentials->save();
 
-        //todo inspect this code for the posting to see why it doesn't pick up the image
-        $accessToken = session()->get('linkedin_access_token');
+            //remove the previous account
+            session()->remove('account');
 
-        $message = new Message();
-
-        $message->setTitle($request->input('title'));
-        $message->setUrl($request->input('url'));
-        $message->setSummary($request->input('summary'));
-        $message->setBody($request->input('message'));
-        $message->setImage($request->input('image'));
-
-        $this->service->shareOnWall($accessToken, $message);
-
-        return redirect(route('social.linkedin.index'))->with('success', 'Post shared successfully.');
+            return redirect()->route('social.index')
+                ->with('success', 'LinkedIn account connected successfully');
+        } catch (\Exception $exception) {
+            return redirect()->route('social.index')
+                ->with('error', $exception->getMessage());
+        } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
+            return redirect()->route('social.index')
+                ->with('error', $e->getMessage());
+        }
     }
 }

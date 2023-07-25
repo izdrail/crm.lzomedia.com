@@ -5,42 +5,30 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "atymic/twitter": "3.*",
         "cornatul/crawler": "@dev",
         "cornatul/feeds": "@dev",
         "cornatul/marketing": "@dev",
         "cornatul/news": "@dev",
+        "cornatul/telegram": "@dev",
         "cornatul/social": "@dev",
         "cornatul/wordpress": "@dev",
         "crwlr/crawler": "dev-main",
         "enqueue/amqp-bunny": "^0.10.0@dev",
-        "laravel/sanctum": "^3.2",
-        "laravel/tinker": "^2.8",
-        "google/apiclient": "^2.12.1",
-        "guzzlehttp/guzzle": "^7.0.1",
-        "imelgrat/opml-parser": "dev-master",
-        "jonathantorres/medium-sdk": "dev-master",
-        "laminas/laminas-feed": "2.0.0",
-        "laminas/laminas-http": "2.0.0",
-        "laminas/laminas-servicemanager": "2.0.0",
         "laravel/framework": "^10.0",
         "laravel/horizon": "^5.0",
+        "laravel/sanctum": "^3.2",
+        "laravel/tinker": "^2.8",
         "laravel/ui": "^4.0",
+        "predis/predis": "^1.1",
         "league/html-to-markdown": "^5.2@dev",
-        "league/oauth1-client": "^1.10",
-        "league/oauth2-google": "dev-main",
-        "league/oauth2-instagram": "dev-main",
-        "league/oauth2-linkedin": "^5.1",
         "livewire/livewire": "^2.3",
         "php-amqplib/php-amqplib": "^3.5",
         "sammyjo20/saloon-cache-plugin": "^2.0",
         "sammyjo20/saloon-laravel": "^2.0",
-        "smolblog/oauth2-twitter": "dev-main",
         "spatie/laravel-query-builder": "dev-main",
         "swiftmailer/swiftmailer": "5.x-dev",
         "symfony/dom-crawler": "6.3.x-dev",
-        "vladimir-yuldashev/laravel-queue-rabbitmq": "^13.2",
-        "zofe/rapyd-livewire": "dev-main"
+        "vladimir-yuldashev/laravel-queue-rabbitmq": "^13.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8@dev",
@@ -52,8 +40,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "php-http/discovery": true,
-            "zofe/rapyd-module-installer": true
+            "php-http/discovery": true
         }
     },
     "extra": {
@@ -113,6 +100,10 @@
         {
             "type": "path",
             "url": "packages/social"
+        },
+        {
+            "type": "path",
+            "url": "packages/telegram"
         }
     ]
 }

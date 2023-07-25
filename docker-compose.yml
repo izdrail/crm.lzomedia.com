@@ -1,84 +1,47 @@
-networks:
-    cms:
-        driver: bridge
+version: '3.8'
+
 services:
-    app:
-        image: cornatul/news.ai:latest
-        environment:
-            - CONTAINER_ROLE=ALL
-        volumes:
-            - .:/var/www/app
-        ports:
-            - 8080:80
-        networks:
-            - cms
-    db:
-        image: mysql:8.0
-        cap_add:
-            - SYS_NICE
-        restart: always
-        volumes:
-            - ./sql:/docker-entrypoint-initdb.d
-        networks:
-            - cms
-        environment:
-            - MYSQL_DATABASE=root
-            - MYSQL_USER=user
-            - MYSQL_PASSWORD=user
-            - MYSQL_ROOT_PASSWORD=root
-        ports:
-            - '3306:3306'
-    adminer:
-        image: adminer
-        restart: unless-stopped
-        ports:
-            - 9000:8080
-        networks:
-            - cms
-        depends_on:
-            - db
-    rabbitmq:
-        image: 'bitnami/rabbitmq:latest'
-        ports:
-            - 15672:15672
-            - 5672:5672
-        networks:
-            - cms
-        environment:
-            - RABBITMQ_USERNAME=user
-            - RABBITMQ_PASSWORD=user
-            - RABBITMQ_VHOST=my_vhost
-    redis:
-        image: redis:6.2-alpine
-        restart: always
-        ports:
-            - '6379:6379'
-        networks:
-            - cms
-    elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
-        container_name: elasticsearch
-        environment:
-            - xpack.security.enabled=false
-            - discovery.type=single-node
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-            nofile:
-                soft: 65536
-                hard: 65536
-        cap_add:
-            - IPC_LOCK
-        ports:
-            - 9200:9200
-            - 9300:9300
-    kibana:
-        container_name: kibana
-        image: docker.elastic.co/kibana/kibana:7.5.0
-        environment:
-            - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-        ports:
-            - 5601:5601
-        depends_on:
-            - elasticsearch
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cor  # Replace with the name you want for the PHP app image
+    container_name: php_app
+    restart: always
+    volumes:
+      - ./your-app-directory:/var/www  # Replace "your-app-directory" with the path to your PHP application code
+    ports:
+      - "80:80"
+    depends_on:
+      - mysql
+      - rabbitmq
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql_server
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PORT: ${DB_PORT}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq_server
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # Web management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  mysql_data:
+  rabbitmq_data:

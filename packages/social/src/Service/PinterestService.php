@@ -12,7 +12,7 @@ use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\LinkedIn;
 use League\OAuth2\Client\Token\LinkedInAccessToken;
 
-class PinterestService implements ShareContract
+class PinterestService
 {
     private LinkedIn $provider;
 

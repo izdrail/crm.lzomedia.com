@@ -17,21 +17,24 @@
                     <th>
                         {{ __('ID') }}
                     </th>
-                    <th>{{ __('Account') }}</th>
+                    <th>{{ __('Type') }}</th>
                     <th>{{ __('Actions') }}</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($accounts as $account)
+                @foreach($account->configuration as $config)
                     <tr>
                         <td>
-                           {{ $account->account }}
+                           {{  $config->id }}
                         </td>
                         <td>
-                            1
+                            {{  $config->type }}
                         </td>
                         <td>
-                        	View
+                            <a class="btn btn-info {{ request()->routeIs('social.linkedin') ? 'active'  : '' }}"
+                               href="{{ route('social.linkedin.login', ['account' => $account->id]) }}">
+                                {{ __('Login LinkedIn') }}
+                            </a>
                         </td>
                     </tr>
                 @endforeach

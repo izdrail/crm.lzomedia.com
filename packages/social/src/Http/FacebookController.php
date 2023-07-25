@@ -18,7 +18,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
-class TwitterController extends Controller
+class FacebookController extends Controller
 {
 
     public final function login(int $account, Request $request): RedirectResponse
@@ -36,9 +36,7 @@ class TwitterController extends Controller
 
         }
 
-        logger($credentials->toJson());
-
-        $provider = new LinkedIn([
+        $provider = new ([
             'clientId' => $config->client_id,
             'clientSecret' => $config->client_secret,
             'redirectUri' => $config->redirect_uri,
