@@ -1,6 +1,6 @@
 #!/bin/sh
+echo "Hello, this is my script!"
 
-cd /var/www
 
 # php artisan migrate:fresh --seed
 php artisan cache:clear
