@@ -5,11 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: cor  # Replace with the name you want for the PHP app image
+    image: cornatul/news.ai  # Replace with the name you want for the PHP app image
     container_name: php_app
     restart: always
     volumes:
-      - ./your-app-directory:/var/www  # Replace "your-app-directory" with the path to your PHP application code
+      - .:/var/www  # Replace "." with the path to your PHP application code
     ports:
       - "80:80"
     depends_on:

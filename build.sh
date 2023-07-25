@@ -17,9 +17,7 @@ echo() {
 # Print a message in green color
 echo "Ahoy captain !!"
 echo "I'm building the boat"
-docker builder prune --all -f
 docker build --pull --rm -f "Dockerfile" -t cornatul/news.ai:latest "."
-docker build . -t cornatul/news.ai:latest
 echo "The boat is build captain"
 
 

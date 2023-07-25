@@ -1,3 +1,8 @@
+FROM composer as builder
+WORKDIR /app/
+COPY composer.* ./
+RUN composer install
+
 FROM php:8.1-fpm
 
 # Set working directory
@@ -51,14 +56,22 @@ RUN cp docker/php.ini /usr/local/etc/php/conf.d/app.ini
 RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
 
 
+
 # PHP Error Log Files
 RUN mkdir /var/log/php
 RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
-# Deployment steps
-RUN composer install --optimize-autoloader --no-dev
-RUN chmod +x /var/www/docker/run.sh
+# Run script
+RUN cp docker/run.sh /run.sh
 
+
+# Deployment steps
+
+
+COPY --from=builder /app/vendor /var/www/vendor
+
+RUN chmod +x /run.sh
 EXPOSE 80
 
-ENTRYPOINT ["./var/www/docker/run.sh"]
+CMD ["/run.sh"]
+
