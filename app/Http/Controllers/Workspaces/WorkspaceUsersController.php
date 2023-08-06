@@ -13,8 +13,7 @@ use App\Services\Workspaces\RemoveUserFromWorkspace;
 
 class WorkspaceUsersController extends Controller
 {
-    /** @var RemoveUserFromWorkspace */
-    private $removeUserFromWorkspace;
+    private RemoveUserFromWorkspace $removeUserFromWorkspace;
 
     public function __construct(RemoveUserFromWorkspace $removeUserFromWorkspace)
     {

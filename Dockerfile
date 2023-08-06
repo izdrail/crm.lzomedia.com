@@ -1,6 +1,14 @@
 FROM composer as builder
 WORKDIR /app/
-COPY composer.* ./
+COPY . .
+
+# Add docker php ext repo
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+# Install php extensions
+RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached sockets intl amqp
+
 RUN composer install
 
 FROM php:8.1-fpm
@@ -66,8 +74,6 @@ RUN cp docker/run.sh /run.sh
 
 
 # Deployment steps
-
-
 COPY --from=builder /app/vendor /var/www/vendor
 
 RUN chmod +x /run.sh
