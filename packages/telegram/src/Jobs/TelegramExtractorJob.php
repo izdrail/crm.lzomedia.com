@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Config;
 use League\OAuth2\Client\Provider\LinkedIn;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
@@ -47,7 +48,7 @@ class TelegramExtractorJob implements ShouldQueue
 
         $client = new \GuzzleHttp\Client();
 
-        $response = $client->post("https://v1.nlpapi.org/article", [
+        $response = $client->post(Config::get('news.url'), [
             'json' => [
                 'link' => $this->url
             ]
@@ -69,7 +70,6 @@ class TelegramExtractorJob implements ShouldQueue
             'text' => "{$dto->title}\n{$dto->summary}\n{$dto->banner}",
         ]);
 
-        //send the linkedin message
         $this->shareessage($dto);
     }
 

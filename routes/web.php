@@ -11,19 +11,19 @@ use App\Http\Middleware\RequireWorkspace;
 
 Auth::routes(
     [
-        'verify' => config('marketing-host.auth.register', false),
-        'register' => config('marketing-host.auth.register', false),
+        'verify' => config('marketing-host.auth.verify', true),
+        'register' => config('marketing-host.auth.register', true),
         'reset' => config('marketing-host.auth.password_reset'),
     ]
 );
 
-Route::get('setup', 'SetupController@index')->name('setup');
+//Route::get('setup', 'SetupController@index')->name('setup');
 
 // Auth.
 Route::middleware('auth')->namespace('Auth')->group(
     static function (Router $authRouter) {
         // Logout.
-        $authRouter->get('logout', 'LoginController@logout')->name('logout');
+//        $authRouter->get('logout', 'LoginController@logout')->name('logout');
 
         // Profile.
         $authRouter->middleware('verified')->name('profile.')->prefix('profile')->group(

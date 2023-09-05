@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://2a1a-86-21-81-121.eu.ngrok.io/'),
+    'url' => env('APP_URL', 'http://localhost:8000'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -187,6 +187,7 @@ return [
 
         //Telegram Service Provider
         Cornatul\Telegram\TelegramServiceProvider::class,
+
     ],
 
     /*
@@ -238,7 +239,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Twitter' => \Thujohn\Twitter\TwitterFacade::class,
+        'Twitter' => Thujohn\Twitter\TwitterFacade::class,
 
     ],
 

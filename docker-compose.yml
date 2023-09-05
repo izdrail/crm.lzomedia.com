@@ -2,16 +2,12 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: cornatul/news.ai  # Replace with the name you want for the PHP app image
+    image: cornatul/news.ai
     container_name: php_app
     restart: always
-    volumes:
-      - .:/var/www  # Replace "." with the path to your PHP application code
     ports:
-      - "80:80"
+      - "8000:80"
+      - "8001:443"
     depends_on:
       - mysql
       - rabbitmq
@@ -36,9 +32,10 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
     ports:
       - "5672:5672"
-      - "15672:15672"  # Web management UI
+      - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 

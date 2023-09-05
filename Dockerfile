@@ -1,18 +1,4 @@
-FROM composer as builder
-WORKDIR /app/
-COPY . .
-
-# Add docker php ext repo
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-# Install php extensions
-RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached sockets intl amqp
-
-RUN composer install
-
-FROM php:8.1-fpm
-
+FROM php:8.2-fpm
 # Set working directory
 WORKDIR /var/www
 
@@ -21,7 +7,7 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 
 # Install php extensions
 RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached sockets intl amqp
+    install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached sockets intl bcmath
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -42,9 +28,17 @@ RUN apt-get update && apt-get install -y \
 # Install supervisor
 RUN apt-get install -y supervisor
 
+
+# Copy code to /var/www
+COPY --chown=www:www-data . /var/www
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+
+
+# Deployment steps
+RUN composer install --optimize-autoloader
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -52,8 +46,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
-# Copy code to /var/www
-COPY --chown=www:www-data . /var/www
+
 
 # add root to www group
 RUN chmod -R ug+w /var/www/storage
@@ -63,21 +56,15 @@ RUN cp docker/supervisor.conf /etc/supervisord.conf
 RUN cp docker/php.ini /usr/local/etc/php/conf.d/app.ini
 RUN cp docker/nginx.conf /etc/nginx/sites-enabled/default
 
-
-
 # PHP Error Log Files
 RUN mkdir /var/log/php
 RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
-# Run script
-RUN cp docker/run.sh /run.sh
 
+RUN chmod +x /var/www/docker/run.sh
 
-# Deployment steps
-COPY --from=builder /app/vendor /var/www/vendor
-
-RUN chmod +x /run.sh
+# Expose ports
 EXPOSE 80
+EXPOSE 443
 
-CMD ["/run.sh"]
-
+ENTRYPOINT ["/var/www/docker/run.sh"]

@@ -16,9 +16,9 @@ echo() {
 
 # Print a message in green color
 echo "Ahoy captain !!"
-echo "I'm putting down the sails !!"
-docker-compose down
-echo "The sails are down"
+echo "I'm raising the sails !!"
+docker-compose up
+echo "I'm ready to sail !!"
 
 
 

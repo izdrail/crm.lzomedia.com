@@ -1,27 +1,17 @@
 #!/bin/bash
 
-# This is a shell script example to print all messages in green color
+# Stop and remove any existing container based on the previous image
+docker stop cornatul/news.ai:latest
+docker rm cornatul/news.ai:latest
 
-# Define a variable for green color escape sequence
-GREEN='\033[0;32m'
+# Get the ID of the previous image (if it exists)
+PREVIOUS_IMAGE_ID=$(docker images -q cornatul/news.ai:latest)
 
-# Define a variable to reset the color back to default
-NC='\033[0m'
+# If the previous image exists, delete it
+if [ -n "$PREVIOUS_IMAGE_ID" ]; then
+    echo "Deleting previous image: $PREVIOUS_IMAGE_ID"
+    docker rmi $PREVIOUS_IMAGE_ID --force
+fi
 
-# Override the echo command to print all messages in green color
-echo() {
-    builtin echo "${GREEN}$@${NC}"
-}
-
-
-# Print a message in green color
-echo "Ahoy captain !!"
-echo "I'm building the boat"
-docker build --pull --rm -f "Dockerfile" -t cornatul/news.ai:latest "."
-echo "The boat is build captain"
-
-
-
-
-
-
+# Build the new Docker image from scratch
+docker build -t cornatul/news.ai:latest --no-cache --progress=plain .

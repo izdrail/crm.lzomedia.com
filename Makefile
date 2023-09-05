@@ -1,3 +1,9 @@
 #!/bin/sh
-# Makefile for the application
-# Build the application
+build:
+	docker build -t cornatul/news.ai:latest --progress=plain .
+build-fresh:
+	docker build -t cornatul/news.ai:latest --no-cache --progress=plain .
+up:
+	docker-compose up
+stop:
+	docker-compose down

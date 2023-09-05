@@ -24,11 +24,11 @@ Route::group(['middleware' => ['web','auth'],'prefix' => 'social', 'as' => 'soci
     Route::post('/linkedin/shareAction', [LinkedInController::class, 'shareAction'])->name('linkedin.shareAction');
 
     //Google
-    Route::get('/google', [GoogleController::class, 'index'])->name('google.index');
-    Route::get('/google/login', [GoogleController::class, 'login'])->name('google.login');
-    Route::get('/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
-    Route::post('/google/shareAction', [GoogleController::class, 'shareAction'])->name('google.shareAction');
-
+//    Route::get('/google', [GoogleController::class, 'index'])->name('google.index');
+//    Route::get('/google/login', [GoogleController::class, 'login'])->name('google.login');
+//    Route::get('/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
+//    Route::post('/google/shareAction', [GoogleController::class, 'shareAction'])->name('google.shareAction');
+//
 
 
     //Twitter
@@ -44,8 +44,8 @@ Route::group(['middleware' => ['web','auth'],'prefix' => 'social', 'as' => 'soci
 
 
     //Medium
-    Route::get('/medium', [MediumController::class, 'index'])->name('medium.index');
-    Route::post('/medium/shareAction', [MediumController::class, 'shareAction'])->name('medium.shareAction');
+//    Route::get('/medium', [MediumController::class, 'index'])->name('medium.index');
+//    Route::post('/medium/shareAction', [MediumController::class, 'shareAction'])->name('medium.shareAction');
 
     //DevTo
     Route::get('/devto', [DevToController::class, 'index'])->name('devto.index');
@@ -53,10 +53,10 @@ Route::group(['middleware' => ['web','auth'],'prefix' => 'social', 'as' => 'soci
 
 
     //Tumblr
-    Route::get('/tumblr', [TumblrController::class, 'index'])->name('tumblr.index');
-    Route::get('/tumblr/login', [TumblrController::class, 'login'])->name('tumblr.login');
-    Route::get('/tumblr/callback', [TumblrController::class, 'callback'])->name('tumblr.callback');
-    Route::post('/tumblr/shareAction', [TumblrController::class, 'shareAction'])->name('tumblr.shareAction');
+//    Route::get('/tumblr', [TumblrController::class, 'index'])->name('tumblr.index');
+//    Route::get('/tumblr/login', [TumblrController::class, 'login'])->name('tumblr.login');
+//    Route::get('/tumblr/callback', [TumblrController::class, 'callback'])->name('tumblr.callback');
+//    Route::post('/tumblr/shareAction', [TumblrController::class, 'shareAction'])->name('tumblr.shareAction');
 
     //To add more social media, just copy the above code and change the name of the social media
 
