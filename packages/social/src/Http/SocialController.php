@@ -17,7 +17,7 @@ class SocialController extends Controller
 {
     public final function index(): View
     {
-        $accounts = SocialAccount::all();
+        $accounts = SocialAccount::paginate();
         return view('social::index',
         	compact('accounts')
         );
