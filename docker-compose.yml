@@ -7,7 +7,7 @@ services:
     container_name: php_app
     restart: always
     volumes:
-      - ./:/app
+      - ./:/var/www/
     ports:
       - "8000:80"
       - "8001:443"
