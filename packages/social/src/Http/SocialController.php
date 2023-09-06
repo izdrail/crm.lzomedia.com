@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornatul\Social\Http;
 use Cornatul\Social\Models\SocialAccount;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 
 /**
