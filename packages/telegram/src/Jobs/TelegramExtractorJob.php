@@ -48,7 +48,7 @@ class TelegramExtractorJob implements ShouldQueue
 
         $client = new \GuzzleHttp\Client();
 
-        $response = $client->post(Config::get('news.url'), [
+        $response = $client->post(config('news.extractor'), [
             'json' => [
                 'link' => $this->url
             ]

@@ -7,3 +7,5 @@ up:
 	docker-compose up
 stop:
 	docker-compose down
+restart-horizon:
+	docker exec -it app_server supervisorctl restart all

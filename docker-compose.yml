@@ -4,8 +4,10 @@ services:
 
   app:
     image: cornatul/news.ai
-    container_name: php_app
+    container_name: app_server
     restart: always
+    networks:
+      - app-network
     volumes:
       - ./:/var/www/
     ports:
@@ -20,6 +22,8 @@ services:
     image: mysql:latest
     container_name: mysql_server
     restart: always
+    networks:
+      - app-network
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -33,6 +37,8 @@ services:
     image: rabbitmq:management
     container_name: rabbitmq_server
     restart: always
+    networks:
+      - app-network
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
@@ -46,19 +52,28 @@ services:
   redis:
     image: redis:4.0
     container_name: redis_server
+    networks:
+      - app-network
     command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
     ports:
       - "6382:6379"
+#Nlp Service
   nlpservice:
     image: cornatul/nlp:v1
+    container_name: nlp_server
     restart: always
+    networks:
+      - app-network
     ports:
-      - "9000:9000"
-    environment:
-      - APP_PORT=9000
-    expose:
-      - 9000
+      - "9000:8000"
+
+# Volumes to be created
 volumes:
   app_data:
   mysql_data:
   rabbitmq_data:
+
+
+# Networks to be created
+networks:
+  app-network:
