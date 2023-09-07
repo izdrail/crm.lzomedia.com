@@ -6,6 +6,9 @@ services:
     image: cornatul/news.ai
     container_name: app_server
     restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nlpservice.rule=Host(`cms.lzomedia.com`)
     networks:
       - app-network
     volumes:
@@ -66,7 +69,22 @@ services:
       - app-network
     ports:
       - "9000:8000"
-
+  traefik:
+    image: traefik:v2.3
+    restart: always
+    container_name: traefik_server
+    networks:
+      - app-network
+    command:
+      - --accesslog
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "7000:8000"
+      - "8080:8080"
 # Volumes to be created
 volumes:
   app_data:

@@ -1,95 +1,97 @@
 <template>
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h5>
-                        Welcome to the feeds finder.
-                    </h5>
+    <div class="row">
+        <div class="col-lg-12">
 
-                    <form @submit.prevent="search">
-                        <input type="text" v-model="topic">
-                        <button type="submit" v-on:click="search">
-                            Search Topic
-                        </button>
-                    </form>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5>
+                                Welcome to the feeds finder.
+                            </h5>
+
+                            <form @submit.prevent="search">
+                                <input type="text" v-model="topic">
+                                <button type="submit" v-on:click="search">
+                                    Search Topic
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-              <div class="col-lg-12">
-                  <p class="mb-0">
-                      Related topics
-                  </p>
-                  <div class="mt-2">
-                      <a class="badge badge-pill badge-danger mr-2" v-for="topic in Topics" v-on:click="setTopic(topic.topic)">
-                          {{topic.topic}}
-                      </a>&nbsp;
-                  </div>&nbsp;
-              </div>
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-            <div class="col-lg-12">
-                <div class="spinner-border " v-if="loading" role="status">
-                    <span class="visually-hidden">Loading...</span>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="mb-0">
+                                Related topics
+                            </p>
+                            <div class="mt-2">
+                                <a class="badge badge-pill badge-danger mr-2" v-for="topic in Topics" v-on:click="setTopic(topic.topic)">
+                                    {{topic.topic}}
+                                </a>&nbsp;
+                            </div>&nbsp;
+                        </div>
+                    </div>
                 </div>
-                <table v-else class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Subscribers</th>
-                        <th scope="col">Score</th>
-                        <th scope="col">Link</th>
-                        <th scope="col">Exists</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(feed, index) in Feeds">
-                        <th scope="row">{{index}}</th>
-                        <td>
-                            <a :href="feed.website">{{ feed.title }}</a>
-                            <br>
-                            <span v-for="topic in feed.topics">{{ topic }},</span>
-                        </td>
-                        <td>
-                            {{ feed.url }}
-                        </td>
-                        <td>{{ feed.subscribers }}</td>
-                        <td>{{ feed.score }}</td>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="spinner-border " v-if="loading" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <table v-else class="table table-sm">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Title</th>
 
-                        <td>
+                                    <th scope="col"></th>
+                                    <th scope="col">Score</th>
+                                    <th scope="col">Exists</th>
+                                    <th scope="col">Update</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(feed, index) in Feeds">
+                                    <th scope="row">{{index}}</th>
+                                    <td>
+                                        <a :href="feed.website">{{ feed.title }}</a>
+                                        <br>
+                                        <span v-for="topic in feed.topics.slice(0,5)">{{ topic }},</span>
+                                    </td>
+                                    <td></td>
+                                    <td>{{ feed.score }}</td>
+
+                                    <td>
                                 <span class="badge bg-success" v-if="feed.imported">
                                     Subscribed
                                 </span>
-                            <span v-else class="badge badge-pill badge-danger">
+                                        <span v-else class="badge badge-pill badge-danger">
                                     Not Subscribed
                                 </span>
-                        </td>
-                        <td>{{ feed.updated }}</td>
+                                    </td>
+                                    <td>{{ feed.updated }}</td>
 
-                        <td>
-                            <a v-if="!feed.imported" href="#" @click.prevent="subscribe(feed)">
-                                Subscribe
-                            </a>
-                            <a class="badge bg-danger" v-else href="#" @click.prevent="unsubscribe(feed)">
-                                Unsubscribe
-                            </a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                                    <td>
+                                        <a v-if="!feed.imported" href="#" @click.prevent="subscribe(feed)">
+                                            Subscribe
+                                        </a>
+                                        <a class="badge bg-danger" v-else href="#" @click.prevent="unsubscribe(feed)">
+                                            Unsubscribe
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
         </div>
     </div>
 </template>

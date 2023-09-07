@@ -16,7 +16,7 @@ use League\OAuth2\Client\Provider\LinkedIn;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
-class TelegramExtractorJob implements ShouldQueue
+class TelegramNewsBot implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -48,7 +48,7 @@ class TelegramExtractorJob implements ShouldQueue
 
         $client = new \GuzzleHttp\Client();
 
-        $response = $client->post(config('news.extractor')."article", [
+        $response = $client->post(config('news.extractor'), [
             'json' => [
                 'link' => $this->url
             ]

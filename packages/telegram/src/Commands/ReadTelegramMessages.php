@@ -40,7 +40,9 @@ class ReadTelegramMessages extends Command
             'timeout' => 0,
         ]);
 
+        //I have new messages
         if (count($messages) > 0) {
+
             $message = $messages[0];
 
             $chatMessage = $message->getMessage()->get('text');
