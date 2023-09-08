@@ -66,6 +66,15 @@ services:
       - app-network
     ports:
       - "9000:8000"
+#WebAi API
+  webai:
+    image: cornatul/webai.ai:latest
+    container_name: webai_server
+    restart: always
+    networks:
+      - app-network
+    ports:
+      - "5000:5000"
 
 #Volumes to be created
 volumes:
