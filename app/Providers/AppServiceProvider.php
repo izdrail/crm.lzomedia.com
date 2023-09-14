@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Events\TelegramEvent;
 use App\Http\Livewire\Setup;
 use App\Models\ApiToken;
 use App\Models\User;
 use Cornatul\Marketing\Base\Facades\MarketingPortal;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -60,5 +63,9 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Livewire::component('setup', Setup::class);
+
+        Event::listen((function (TelegramEvent $event) {
+            Log::info('Telegram processed Event');
+        }));
     }
 }

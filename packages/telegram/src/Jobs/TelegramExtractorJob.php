@@ -2,6 +2,7 @@
 
 namespace Cornatul\Telegram\Jobs;
 
+use App\Events\TelegramEvent;
 use Cornatul\Feeds\DTO\ArticleDto;
 use Cornatul\Social\Models\SocialAccountConfiguration;
 use GuzzleHttp\Client;
@@ -70,69 +71,73 @@ class TelegramExtractorJob implements ShouldQueue
             'text' => "{$dto->title}\n{$dto->summary}\n{$dto->banner}",
         ]);
 
-        $this->shareessage($dto);
+        $this->shareMessage($dto);
     }
 
 
 
 
-    private function shareessage($dto)
+    private function shareMessage(ArticleDto $dto):void
     {
 
-        $configuration = SocialAccountConfiguration::inRandomOrder()->get()->first();
+        TelegramEvent::dispatch($dto);
 
-        $config = json_decode($configuration->configuration);
+        logger("share message");
 
-        $token = json_decode($configuration->token);
-
-
-        $client = new Client();
-
-        $headers = [
-            'Authorization' => 'Bearer ' . $token->token->access_token,
-            'Content-Type' => 'application/json',
-            'X-Restli-Protocol-Version' => '2.0.0',
-        ];
-
-        $body = [
-            'author' => 'urn:li:person:' . $token->user->id,
-            'lifecycleState' => 'PUBLISHED',
-            'specificContent' => [
-                'com.linkedin.ugc.ShareContent' => [
-                    'shareCommentary' => [
-                        'text' => $dto->summary
-                    ],
-                    'shareMediaCategory' => 'ARTICLE',
-                    'media' => [
-                        [
-                            'status' => 'READY',
-                            'description' => [
-                                'text' => $dto->summary,
-                            ],
-                            'originalUrl' => "https://lzomedia.com",
-                            'title' => [
-                                'text' => $dto->title,
-                            ],
-                            'thumbnails' => [
-                                [
-                                    'image' => $dto->banner,
-                                    'resolvedUrl' => $dto->banner,
-                                ],
-                            ],
-                        ],
-                    ],
-
-                ],
-            ],
-            'visibility' => [
-                'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC',
-            ],
-        ];
-
-        return $client->request('POST', 'https://api.linkedin.com/v2/ugcPosts', [
-            'headers' => $headers,
-            'json' => $body,
-        ]);
+//        $configuration = SocialAccountConfiguration::inRandomOrder()->get()->first();
+//
+//        $config = json_decode($configuration->configuration);
+//
+//        $token = json_decode($configuration->token);
+//
+//
+//        $client = new Client();
+//
+//        $headers = [
+//            'Authorization' => 'Bearer ' . $token->token->access_token,
+//            'Content-Type' => 'application/json',
+//            'X-Restli-Protocol-Version' => '2.0.0',
+//        ];
+//
+//        $body = [
+//            'author' => 'urn:li:person:' . $token->user->id,
+//            'lifecycleState' => 'PUBLISHED',
+//            'specificContent' => [
+//                'com.linkedin.ugc.ShareContent' => [
+//                    'shareCommentary' => [
+//                        'text' => $dto->summary
+//                    ],
+//                    'shareMediaCategory' => 'ARTICLE',
+//                    'media' => [
+//                        [
+//                            'status' => 'READY',
+//                            'description' => [
+//                                'text' => $dto->summary,
+//                            ],
+//                            'originalUrl' => "https://lzomedia.com",
+//                            'title' => [
+//                                'text' => $dto->title,
+//                            ],
+//                            'thumbnails' => [
+//                                [
+//                                    'image' => $dto->banner,
+//                                    'resolvedUrl' => $dto->banner,
+//                                ],
+//                            ],
+//                        ],
+//                    ],
+//
+//                ],
+//            ],
+//            'visibility' => [
+//                'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC',
+//            ],
+//        ];
+//
+//        return $client->request('POST', 'https://api.linkedin.com/v2/ugcPosts', [
+//            'headers' => $headers,
+//            'json' => $body,
+//        ]);
     }
 
 

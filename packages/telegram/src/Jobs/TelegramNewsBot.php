@@ -2,6 +2,7 @@
 
 namespace Cornatul\Telegram\Jobs;
 
+use App\Events\TelegramEvent;
 use Cornatul\Feeds\DTO\ArticleDto;
 use Cornatul\Social\Models\SocialAccountConfiguration;
 use GuzzleHttp\Client;
@@ -11,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use League\OAuth2\Client\Provider\LinkedIn;
 use Telegram\Bot\Api;
@@ -63,28 +65,29 @@ class TelegramNewsBot implements ShouldQueue
             )
         );
 
+
         $dto = ArticleDto::from($collection->get('data'));
 
-        $this->telegram->sendMessage([
-            'chat_id' => $this->chatID,
-            'text' => "{$dto->title}\n{$dto->summary}\n{$dto->banner}",
-        ]);
+        //dispatch event
+        dispatch(new TelegramEvent ($collection, $this->telegram, $this->chatID));
 
-        $this->shareessage($dto);
+        $this->shareMessage($dto);
     }
 
 
-
-
-    private function shareessage($dto)
+    /**
+     * @todo move this to a service eventually
+     * @param ArticleDto $dto
+     * @return void
+     * @throws GuzzleException
+     */
+    private function shareMessage(ArticleDto $dto):void
     {
 
         $configuration = SocialAccountConfiguration::inRandomOrder()->get()->first();
 
-        $config = json_decode($configuration->configuration);
 
         $token = json_decode($configuration->token);
-
 
         $client = new Client();
 
@@ -129,14 +132,15 @@ class TelegramNewsBot implements ShouldQueue
             ],
         ];
 
-        return $client->request('POST', 'https://api.linkedin.com/v2/ugcPosts', [
+        $client->request('POST', 'https://api.linkedin.com/v2/ugcPosts', [
             'headers' => $headers,
             'json' => $body,
         ]);
+
     }
 
 
-    public function fail($exception = null)
+    public function fail($exception = null): void
     {
         $this->telegram->sendMessage([
             'chat_id' => $this->chatID,
