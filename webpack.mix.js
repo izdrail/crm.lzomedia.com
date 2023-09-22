@@ -12,3 +12,4 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/feeds.js', 'public/js').vue().sourceMaps();
+mix.js('resources/assets/js/news.js', 'public/js').vue().sourceMaps();

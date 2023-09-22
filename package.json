@@ -37,6 +37,7 @@
         "vue-timeago": "^5.1.3",
         "vue-timeago3": "^2.3.0",
         "vue3-carousel": "^0.1.40",
+        "vue3-tabs-component": "^1.3.6",
         "vue3-timeago": "^1.0.6"
     }
 }

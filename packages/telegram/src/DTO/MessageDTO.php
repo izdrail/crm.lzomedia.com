@@ -6,7 +6,7 @@ namespace Cornatul\Telegram\DTO;
 
 use Spatie\LaravelData\Data;
 
-class MessageDTO implements Data
+class MessageDTO extends Data
 {
 
 }
