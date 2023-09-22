@@ -145,7 +145,7 @@
       0 => 'Rap2hpoutre\\FastExcel\\Providers\\FastExcelServiceProvider',
     ),
   ),
-  'sammyjo20/saloon-laravel' => 
+  'saloonphp/laravel-plugin' => 
   array (
     'aliases' => 
     array (
